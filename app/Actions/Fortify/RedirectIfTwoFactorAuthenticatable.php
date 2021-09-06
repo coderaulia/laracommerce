@@ -4,6 +4,7 @@ namespace App\Actions\Fortify;
 
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\LoginRateLimiter;
@@ -78,7 +79,7 @@ class RedirectIfTwoFactorAuthenticatable
         $model = $this->guard->getProvider()->getModel();
 
         return tap($model::where(Fortify::username(), $request->{Fortify::username()})->first(), function ($user) use ($request) {
-            if (! $user || ! $this->guard->getProvider()->validateCredentials($user, ['password' => $request->password])) {
+            if (! $user || ! Hash::check($request->password, $user->password)) {
                 $this->fireFailedEvent($request, $user);
 
                 $this->throwFailedAuthenticationException($request);
