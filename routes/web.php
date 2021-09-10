@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\AdminProfileController;
 use App\Http\Controllers\Frontend\IndexController;
 
 use App\Models\User;
+use Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,5 +41,14 @@ Route::middleware(['auth:admin'])->group(function(){
 
 
 Route::middleware(['auth:sanctum,web', 'verified'])->get('/dashboard', function () {
+    $id = Auth::user()->id;
+    $user = User::find($id);
     return view('dashboard');
 })->name('dashboard');
+
+// User
+Route::get('/user/logout', [IndexController::class, 'UserLogout'])->name('user.logout');
+Route::get('/user/profile', [IndexController::class, 'UserProfile'])->name('user.profile');
+Route::post('/user/profile/store', [IndexController::class, 'UserProfileStore'])->name('user.profile.store');
+Route::get('/user/change/password', [IndexController::class, 'UserChangePassword'])->name('change.password');
+Route::post('/user/password/update', [IndexController::class, 'UserPasswordUpdate'])->name('user.password.update');
