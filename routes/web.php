@@ -4,9 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Backend\AdminProfileController;
 use App\Http\Controllers\Frontend\IndexController;
-
-use App\Models\User;
 use Auth;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,7 +42,7 @@ Route::middleware(['auth:admin'])->group(function(){
 Route::middleware(['auth:sanctum,web', 'verified'])->get('/dashboard', function () {
     $id = Auth::user()->id;
     $user = User::find($id);
-    return view('dashboard');
+    return view('dashboard', compact('user'));
 })->name('dashboard');
 
 // User
