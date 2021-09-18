@@ -33,7 +33,7 @@ class UserRedirectIfAuthenticated
 
         
         if (Auth::check() && Auth::user()) {
-           return $next($request);
+           return redirect()->route('/dashboard');
         }else {
             return redirect()->route('login');
         }      
